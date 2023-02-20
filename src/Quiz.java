@@ -50,6 +50,19 @@ public class Quiz implements ActionListener{
 	 JTextField number_right = new JTextField();
 	 JTextField percentage = new JTextField();
 	 
+	 Timer timer = new Timer(1000, new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			seconds--;
+			seconds_left.setText(String.valueOf(seconds));
+			if(seconds <= 0) {
+				displayAnser();
+			}
+		}
+		 
+	 });
+	 
 	
 	public Quiz() { 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,25 +91,25 @@ public class Quiz implements ActionListener{
 		
 		buttonA.setBounds(0, 100, 100, 100);
 		buttonA.setFont(new Font(null,Font.BOLD,35));
-		buttonA.setFocusable(false);
+		//buttonA.setFocusable(false);
 		buttonA.addActionListener(this);
 		buttonA.setText("A");
 		
 		buttonB.setBounds(0, 200, 100, 100);
 		buttonB.setFont(new Font(null,Font.BOLD,35));
-		buttonB.setFocusable(false);
+		//buttonB.setFocusable(false);
 		buttonB.addActionListener(this);
 		buttonB.setText("B"); 
 		
 		buttonC.setBounds(0, 300, 100, 100);
 		buttonC.setFont(new Font(null,Font.BOLD,35));
-		buttonC.setFocusable(false);
+		//buttonC.setFocusable(false);
 		buttonC.addActionListener(this);
 		buttonC.setText("C");
 		
 		buttonD.setBounds(0, 400, 100, 100);
 		buttonD.setFont(new Font(null,Font.BOLD,35));
-		buttonD.setFocusable(false);
+	//	buttonD.setFocusable(false);
 		buttonD.addActionListener(this);
 		buttonD.setText("D");
 		
@@ -141,7 +154,7 @@ public class Quiz implements ActionListener{
 		number_right.setBounds(225,225,200,100);
 		number_right.setBackground(new Color(25,25,25));
 		number_right.setForeground(new Color(25,255,0));
-		number_right.setFont(new Font("Ink Free",Font.BOLD,50));
+		number_right.setFont(new Font("Ink Free",Font.BOLD,20));
 		number_right.setBorder(BorderFactory.createBevelBorder(1));
 		number_right.setHorizontalAlignment(JTextField.CENTER);
 		number_right.setEditable(false);
@@ -156,8 +169,7 @@ public class Quiz implements ActionListener{
 
 		
 		
-		frame.add(number_right);
-		frame.add(percentage);
+	
 		frame.add(time_label);
 		frame.add(seconds_left);
 		frame.add(answer_labelA);
@@ -171,23 +183,124 @@ public class Quiz implements ActionListener{
 		frame.add(textField);
 		frame.add(textArea);
 		frame.setVisible(true);
+		nextQuestion();
 		
 	}
 	public void nextQuestion() {
 		
+		if(index >=total_questions) {
+			results();
+		}
+		else {
+			textField.setText("Question :"+(index+1));
+			textArea.setText(questions[index]);
+			answer_labelA.setText(options[index][0]);
+			answer_labelB.setText(options[index][1]);
+			answer_labelC.setText(options[index][2]);
+			answer_labelD.setText(options[index][3]);
+			timer.start();
+		}
 	}
 	
 	public void displayAnser() {
+		timer.stop();
 		
+		buttonA.setEnabled(false);
+		buttonA.setEnabled(false);
+		buttonA.setEnabled(false);
+		buttonA.setEnabled(false);
+		
+		if(answers[index] != 'A') {
+			answer_labelA.setForeground(new Color(255,0,0));
+		}
+		if(answers[index] != 'B') {
+			answer_labelB.setForeground(new Color(255,0,0));
+		}
+		if(answers[index] != 'C') {
+			answer_labelC.setForeground(new Color(255,0,0));
+		}
+		if(answers[index] != 'D') {
+			answer_labelD.setForeground(new Color(255,0,0));
+		}
+		Timer pause = new Timer(1000,new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				answer_labelA.setForeground(new Color(25,255,0));			
+				answer_labelB.setForeground(new Color(25,255,0));			
+				answer_labelC.setForeground(new Color(25,255,0));			
+				answer_labelD.setForeground(new Color(25,255,0));		
+				
+				answer = ' ';
+				seconds = 10;
+				seconds_left.setText(String.valueOf(seconds));
+				buttonA.setEnabled(true);
+				buttonB.setEnabled(true);
+				buttonC.setEnabled(true);
+				buttonD.setEnabled(true);
+				index++;
+				nextQuestion();
+			}
+			
+		});
+		pause.setRepeats(false);
+		pause.start();
 	}
 	
 	public void results() {
+		buttonA.setEnabled(false);
+		buttonB.setEnabled(false);
+		buttonC.setEnabled(false);
+		buttonD.setEnabled(false);
 		
+		answer_labelA.setText(" ");
+		answer_labelB.setText(" ");
+		answer_labelC.setText(" ");
+		answer_labelD.setText(" ");
+		
+		textField.setText("Question Finished");
+		textArea.setText("Results");
+		
+		result = (int)((correct_guesses/(double)total_questions)*100);
+
+		//result = (int)(correct_guesses/total_questions)*100;
+		number_right.setText("("+correct_guesses+"/"+total_questions+")");
+		percentage.setText(result +"%");
+		frame.add(number_right);
+		frame.add(percentage);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		buttonA.setEnabled(false);
+		buttonB.setEnabled(false);
+		buttonC.setEnabled(false);
+		buttonD.setEnabled(false);
+		if(e.getSource() == buttonA) {
+			answer = 'A';
+			if(answer == answers[index]) {
+				correct_guesses++;
+			}
+		}
+		if(e.getSource() == buttonB) {
+			answer = 'B';
+			if(answer == answers[index]) {
+				correct_guesses++;
+			}
+		}
+		if(e.getSource() == buttonC) {
+			answer = 'C';
+			if(answer == answers[index]) {
+				correct_guesses++;
+			}
+		}
+		if(e.getSource() == buttonD) {
+			answer = 'D';
+			if(answer == answers[index]) {
+				correct_guesses++;
+			}
+		}
+		displayAnser();
 		
 	}
 }
