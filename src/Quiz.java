@@ -136,21 +136,24 @@ public class Quiz implements ActionListener{
 		time_label.setHorizontalAlignment(JTextField.CENTER);
 		time_label.setText("Timer");
 		
-		number_right.setBounds(255,255,200,100);
+
+
+		number_right.setBounds(225,225,200,100);
 		number_right.setBackground(new Color(25,25,25));
 		number_right.setForeground(new Color(25,255,0));
-		number_right.setFont(new Font(null, Font.BOLD,50));
+		number_right.setFont(new Font("Ink Free",Font.BOLD,50));
 		number_right.setBorder(BorderFactory.createBevelBorder(1));
 		number_right.setHorizontalAlignment(JTextField.CENTER);
 		number_right.setEditable(false);
-		
+	
 		percentage.setBounds(225,325,200,100);
 		percentage.setBackground(new Color(25,25,25));
 		percentage.setForeground(new Color(25,255,0));
-		percentage.setFont(new Font(null, Font.BOLD,50));
+		percentage.setFont(new Font("Ink Free",Font.BOLD,50));
 		percentage.setBorder(BorderFactory.createBevelBorder(1));
 		percentage.setHorizontalAlignment(JTextField.CENTER);
 		percentage.setEditable(false);
+
 		
 		
 		frame.add(number_right);
